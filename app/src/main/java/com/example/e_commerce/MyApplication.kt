@@ -1,13 +1,16 @@
-package com.example.e_commerce.utils
+package com.example.e_commerce
 
 import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.HiltAndroidApp
 import io.reactivex.schedulers.Schedulers
 
-class MyApplication:Application() {
+@HiltAndroidApp
+
+class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         listenToNetworkConnectivity()

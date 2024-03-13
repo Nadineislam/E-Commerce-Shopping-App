@@ -1,9 +1,9 @@
-package com.example.e_commerce.utils
+package com.example.e_commerce.core.utils
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 object CrashlyticsUtils {
-    const val CUSTOME_ENDPOINT_KEY = "CUSTOME_ENDPOINT_KEY"
+    const val CUSTOM_ENDPOINT_KEY = "CUSTOME_ENDPOINT_KEY"
 
     /**
      * random cases key
