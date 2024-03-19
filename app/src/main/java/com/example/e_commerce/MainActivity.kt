@@ -2,7 +2,6 @@ package com.example.e_commerce
 
 import android.animation.ObjectAnimator
 import android.app.ActivityOptions
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -13,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import androidx.multidex.MultiDex
 import com.example.e_commerce.auth_feature.representation.activity.AuthActivity
 import com.example.e_commerce.auth_feature.representation.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,7 +39,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun goToAuthActivity() {
-        val intent = Intent(this, AuthActivity::class.java)
+        val intent = Intent(this, AuthActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
         val options = ActivityOptions.makeCustomAnimation(
             this, android.R.anim.fade_in, android.R.anim.fade_out
         )
