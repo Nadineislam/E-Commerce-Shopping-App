@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".auth_feature.representation.fragments.LoginFragment"
+    tools:context=".auth_feature.presentation.fragments.LoginFragment"
     >
     <data>
         <variable
             name="viewmodel"
-            type="com.example.e_commerce.auth_feature.representation.viewmodel.LoginViewModel" />
+            type="com.example.e_commerce.auth_feature.presentation.viewmodel.LoginViewModel" />
     </data>
     <ScrollView
         android:layout_width="match_parent"
@@ -44,6 +44,8 @@
                 android:text="@string/sign_in_msg" />
 
             <androidx.appcompat.widget.AppCompatEditText
+                android:inputType="textEmailAddress"
+                android:text="@={viewmodel.email}"
                 android:id="@+id/email_et"
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
@@ -53,6 +55,7 @@
                 android:hint="@string/email_et_hint" />
 
             <androidx.appcompat.widget.AppCompatEditText
+                android:text="@={viewmodel.password}"
                 android:id="@+id/password_et"
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
@@ -63,6 +66,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="@style/PrimaryButtonStyle"
+                android:onClick="@{() -> viewmodel.login()}"
                 android:layout_marginTop="16dp"
                 android:text="@string/sign_in" />
 

@@ -12,8 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.example.e_commerce.auth_feature.representation.activity.AuthActivity
-import com.example.e_commerce.auth_feature.representation.viewmodel.UserViewModel
+import com.example.e_commerce.auth_feature.presentation.activity.AuthActivity
+import com.example.e_commerce.auth_feature.presentation.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.first
