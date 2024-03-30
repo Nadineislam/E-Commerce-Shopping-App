@@ -1,11 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">E_Commerce</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="auth_welcome_msg">Welcome to Lafyuu</string>
     <string name="sign_in_msg">Sign in to continue</string>
-    <string name="email_et_hint">Your Email</string>
     <string name="password_et_hint">Password</string>
     <string name="sign_in">Sign In</string>
+    <string name="email_et_hint">Your Email</string>
     <string name="or">or</string>
     <string name="google_signin_btn_msg">Login With Google</string>
     <string name="facebook_signin_btn_msg">Login With Facebook</string>
