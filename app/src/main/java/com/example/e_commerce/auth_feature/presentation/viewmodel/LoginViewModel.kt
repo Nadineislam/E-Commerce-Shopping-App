@@ -2,6 +2,7 @@ package com.example.e_commerce.auth_feature.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.e_commerce.auth_feature.domain.repository.FirebaseAuthRepository
 import com.example.e_commerce.auth_feature.domain.use_case.LoginUseCase
 import com.example.e_commerce.core.extensions.isValidEmail
 import com.example.e_commerce.core.utils.Resource
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val authRepository: FirebaseAuthRepository
 ) : ViewModel() {
     private val _loginState = MutableSharedFlow<Resource<String>>()
     val loginState = _loginState.asSharedFlow()
@@ -59,6 +61,20 @@ class LoginViewModel @Inject constructor(
         } else {
             _loginState.emit(Resource.Error(Exception("Invalid email or password")))
         }
+    }
+
+    fun loginWithGoogle(idToken: String) = viewModelScope.launch {
+        _loginState.emit(Resource.Loading())
+        authRepository.loginWithGoogle(idToken).onEach { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    //         savePreferenceData(resource.data!!)
+                    _loginState.emit(Resource.Success(resource.data ?: "Empty User Id"))
+                }
+
+                else -> _loginState.emit(resource)
+            }
+        }.launchIn(viewModelScope)
     }
 
 }

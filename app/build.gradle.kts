@@ -32,6 +32,13 @@ android {
                 "proguard-rules.pro"
             )
         }
+        forEach {
+            it.buildConfigField(
+                "String",
+                "clientServerId",
+                "\"642875792498-19fm9ls9lsf11rt959bt80caeiecokvg.apps.googleusercontent.com\""
+            )
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -67,7 +74,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
 
+    // third party libraries
     implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
 
     //navigation components
@@ -77,8 +86,8 @@ dependencies {
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$navVersion")
 
     //Dagger hilt
-    implementation ("com.google.dagger:hilt-android:2.48")
-    kapt ("com.google.dagger:hilt-compiler:2.48")
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-compiler:2.48")
 
 
 }

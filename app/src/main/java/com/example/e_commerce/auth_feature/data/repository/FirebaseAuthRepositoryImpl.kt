@@ -3,6 +3,7 @@ package com.example.e_commerce.auth_feature.data.repository
 import com.example.e_commerce.auth_feature.domain.repository.FirebaseAuthRepository
 import com.example.e_commerce.core.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -23,5 +24,23 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             emit(Resource.Error(e))
         }
+    }
+
+    override suspend fun loginWithGoogle(idToken: String): Flow<Resource<String>> = flow {
+        try {
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
+            val authResult = auth.signInWithCredential(credential).await()
+            authResult.user?.let { user ->
+                emit(Resource.Success(user.uid))
+            } ?: run {
+                emit(Resource.Error(Exception("User not found")))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e))
+        }
+    }
+
+    override fun logout() {
+        auth.signOut()
     }
 }
