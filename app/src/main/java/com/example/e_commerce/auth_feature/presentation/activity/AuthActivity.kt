@@ -1,4 +1,4 @@
-package com.example.e_commerce.auth_feature.representation.activity
+package com.example.e_commerce.auth_feature.presentation.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
