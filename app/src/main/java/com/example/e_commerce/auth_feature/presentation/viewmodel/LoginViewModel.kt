@@ -2,8 +2,8 @@ package com.example.e_commerce.auth_feature.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.e_commerce.auth_feature.domain.repository.FirebaseAuthRepository
 import com.example.e_commerce.auth_feature.domain.use_case.LoginUseCase
+import com.example.e_commerce.auth_feature.domain.use_case.LoginWithGoogleUseCase
 import com.example.e_commerce.core.extensions.isValidEmail
 import com.example.e_commerce.core.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val authRepository: FirebaseAuthRepository
+    private val loginWithGoogleUseCase: LoginWithGoogleUseCase
 ) : ViewModel() {
     private val _loginState = MutableSharedFlow<Resource<String>>()
     val loginState = _loginState.asSharedFlow()
@@ -65,7 +65,7 @@ class LoginViewModel @Inject constructor(
 
     fun loginWithGoogle(idToken: String) = viewModelScope.launch {
         _loginState.emit(Resource.Loading())
-        authRepository.loginWithGoogle(idToken).onEach { resource ->
+        loginWithGoogleUseCase(idToken).onEach { resource ->
             when (resource) {
                 is Resource.Success -> {
                     //         savePreferenceData(resource.data!!)
