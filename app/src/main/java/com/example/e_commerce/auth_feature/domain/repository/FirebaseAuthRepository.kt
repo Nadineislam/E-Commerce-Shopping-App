@@ -12,5 +12,7 @@ interface FirebaseAuthRepository {
         idToken: String
     ): Flow<Resource<String>>
 
+    suspend fun loginWithFacebook(token: String): Flow<Resource<String>>
+
     fun logout()
 }

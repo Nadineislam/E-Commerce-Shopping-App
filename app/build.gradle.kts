@@ -38,6 +38,21 @@ android {
                 "clientServerId",
                 "\"642875792498-19fm9ls9lsf11rt959bt80caeiecokvg.apps.googleusercontent.com\""
             )
+            it.resValue(
+                "string",
+                "facebook_app_id",
+                "\"1593630281413270\""
+            )
+            it.resValue(
+                "string",
+                "fb_login_protocol_scheme",
+                "\"fb1593630281413270\""
+            )
+            it.resValue(
+                "string",
+                "facebook_client_token",
+                "\"51146f26178eea79f49c934295e3780e\""
+            )
         }
     }
     compileOptions {
@@ -75,6 +90,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.android.gms:play-services-auth:21.0.0")
+    implementation("com.facebook.android:facebook-login:16.0.0")
 
     // third party libraries
     implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")

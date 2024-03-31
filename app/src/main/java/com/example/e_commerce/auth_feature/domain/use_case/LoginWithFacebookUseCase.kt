@@ -5,9 +5,9 @@ import com.example.e_commerce.core.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class LoginWithGoogleUseCase @Inject constructor(private val firebaseAuthRepository: FirebaseAuthRepository) {
+class LoginWithFacebookUseCase @Inject constructor(private val firebaseAuthRepository: FirebaseAuthRepository) {
 
-    suspend operator fun invoke(idToken: String): Flow<Resource<String>> {
-        return firebaseAuthRepository.loginWithGoogle(idToken)
+    suspend operator fun invoke(token: String): Flow<Resource<String>> {
+        return firebaseAuthRepository.loginWithFacebook(token)
     }
 }
