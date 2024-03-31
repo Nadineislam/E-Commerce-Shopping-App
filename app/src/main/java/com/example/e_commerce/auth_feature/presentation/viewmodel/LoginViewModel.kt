@@ -3,6 +3,7 @@ package com.example.e_commerce.auth_feature.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.e_commerce.auth_feature.domain.use_case.LoginUseCase
+import com.example.e_commerce.auth_feature.domain.use_case.LoginWithFacebookUseCase
 import com.example.e_commerce.auth_feature.domain.use_case.LoginWithGoogleUseCase
 import com.example.e_commerce.core.extensions.isValidEmail
 import com.example.e_commerce.core.utils.Resource
@@ -21,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val loginWithGoogleUseCase: LoginWithGoogleUseCase
+    private val loginWithGoogleUseCase: LoginWithGoogleUseCase,
+    private val loginWithFacebookUseCase: LoginWithFacebookUseCase
 ) : ViewModel() {
     private val _loginState = MutableSharedFlow<Resource<String>>()
     val loginState = _loginState.asSharedFlow()
@@ -74,6 +76,18 @@ class LoginViewModel @Inject constructor(
 
                 else -> _loginState.emit(resource)
             }
+        }.launchIn(viewModelScope)
+    }
+    fun loginWithFacebook(token:String)=viewModelScope.launch {
+        loginWithFacebookUseCase(token).onEach {resource->
+        when(resource){
+            is Resource.Success->{
+                _loginState.emit(Resource.Success(resource.data?:"Empty user id"))
+            }
+            else -> _loginState.emit(resource)
+
+        }
+
         }.launchIn(viewModelScope)
     }
 

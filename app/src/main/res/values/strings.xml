@@ -1,4 +1,8 @@
 <resources>
+    <string name="facebook_app_id" translatable="false">1593630281413270</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1593630281413270</string>
+    <string name="facebook_client_token" translatable="false">51146f26178eea79f49c934295e3780e</string>
+
     <string name="app_name">E_Commerce</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="auth_welcome_msg">Welcome to Lafyuu</string>
