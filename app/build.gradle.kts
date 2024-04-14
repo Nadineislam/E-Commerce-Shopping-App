@@ -86,6 +86,7 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     //firebase dependencies
+    implementation ("com.google.firebase:firebase-firestore-ktx:24.11.1")
     implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-crashlytics")
@@ -104,6 +105,10 @@ dependencies {
     //Dagger hilt
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-compiler:2.48")
+
+    implementation  ("androidx.datastore:datastore:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("com.google.protobuf:protobuf-kotlin-lite:4.26.0")
 
 
 }

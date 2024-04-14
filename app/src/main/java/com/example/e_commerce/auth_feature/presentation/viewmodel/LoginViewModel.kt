@@ -2,20 +2,23 @@ package com.example.e_commerce.auth_feature.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.e_commerce.auth_feature.data.models.UserDetailsModel
+import com.example.e_commerce.auth_feature.domain.models.toUserDetailsPreferences
+import com.example.e_commerce.auth_feature.domain.repository.AppDataStoreRepository
+import com.example.e_commerce.auth_feature.domain.repository.UserPreferencesRepository
 import com.example.e_commerce.auth_feature.domain.use_case.LoginUseCase
 import com.example.e_commerce.auth_feature.domain.use_case.LoginWithFacebookUseCase
 import com.example.e_commerce.auth_feature.domain.use_case.LoginWithGoogleUseCase
 import com.example.e_commerce.core.extensions.isValidEmail
 import com.example.e_commerce.core.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,9 +26,11 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val loginWithGoogleUseCase: LoginWithGoogleUseCase,
-    private val loginWithFacebookUseCase: LoginWithFacebookUseCase
+    private val loginWithFacebookUseCase: LoginWithFacebookUseCase,
+    private val appDataStoreRepository: AppDataStoreRepository,
+    private val userPreferenceRepository: UserPreferencesRepository,
 ) : ViewModel() {
-    private val _loginState = MutableSharedFlow<Resource<String>>()
+    private val _loginState = MutableSharedFlow<Resource<UserDetailsModel>>()
     val loginState = _loginState.asSharedFlow()
 
     val email = MutableStateFlow("")
@@ -35,60 +40,39 @@ class LoginViewModel @Inject constructor(
         email.isValidEmail() && password.length >= 6
     }
 
-    fun login() = viewModelScope.launch {
+    fun loginWithEmailAndPassword() = viewModelScope.launch {
         val email = email.value
         val password = password.value
         if (isLoginIsValid.first()) {
-            _loginState.emit(Resource.Loading())
-            loginUseCase(email, password).onEach { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        _loginState.emit(Resource.Loading())
-                    }
-
-                    is Resource.Success -> {
-                        //       savePreferenceData(resource.data!!)
-                        _loginState.emit(Resource.Success(resource.data ?: "Empty User Id"))
-                    }
-
-                    is Resource.Error -> {
-                        _loginState.emit(
-                            Resource.Error(
-                                resource.exception ?: Exception("Unknown Error")
-                            )
-                        )
-                    }
-                }
-            }.launchIn(viewModelScope)
+            handleLoginFlow { loginUseCase(email, password) }
         } else {
             _loginState.emit(Resource.Error(Exception("Invalid email or password")))
         }
     }
 
-    fun loginWithGoogle(idToken: String) = viewModelScope.launch {
-        _loginState.emit(Resource.Loading())
-        loginWithGoogleUseCase(idToken).onEach { resource ->
-            when (resource) {
-                is Resource.Success -> {
-                    //         savePreferenceData(resource.data!!)
-                    _loginState.emit(Resource.Success(resource.data ?: "Empty User Id"))
-                }
-
-                else -> _loginState.emit(resource)
-            }
-        }.launchIn(viewModelScope)
+    fun loginWithGoogle(idToken: String){
+        handleLoginFlow { loginWithGoogleUseCase(idToken) }
     }
-    fun loginWithFacebook(token:String)=viewModelScope.launch {
-        loginWithFacebookUseCase(token).onEach {resource->
-        when(resource){
-            is Resource.Success->{
-                _loginState.emit(Resource.Success(resource.data?:"Empty user id"))
-            }
-            else -> _loginState.emit(resource)
+    fun loginWithFacebook(token:String){
+        handleLoginFlow { loginWithFacebookUseCase(token) }
 
+    }
+    private fun handleLoginFlow(loginFlow: suspend () -> Flow<Resource<UserDetailsModel>>) =
+        viewModelScope.launch(IO) {
+            loginFlow().collect { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        savePreferenceData(resource.data!!)
+                        _loginState.emit(Resource.Success(resource.data))
+                    }
+
+                    else -> _loginState.emit(resource)
+                }
+            }
         }
 
-        }.launchIn(viewModelScope)
+    private suspend fun savePreferenceData(userDetailsModel: UserDetailsModel) {
+        appDataStoreRepository.saveLoginState(true)
+        userPreferenceRepository.updateUserDetails(userDetailsModel.toUserDetailsPreferences())
     }
-
 }
