@@ -15,9 +15,9 @@ import androidx.lifecycle.lifecycleScope
 import com.example.e_commerce.auth_feature.presentation.activity.AuthActivity
 import com.example.e_commerce.auth_feature.presentation.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 @AndroidEntryPoint
@@ -27,14 +27,30 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         initSplashScreen()
         super.onCreate(savedInstanceState)
+        val isLoggedIn = runBlocking { userViewModel.isUserLoggedIn().first() }
+        if (!isLoggedIn) {
+            goToAuthActivity()
+            return
+        }
         setContentView(R.layout.activity_main)
-        lifecycleScope.launch(Main) {
-            val isLoggedIn = userViewModel.isUserLoggedIn().first()
-            if (isLoggedIn) {
-                setContentView(R.layout.activity_main)
-            } else {
-                goToAuthActivity()
+        findViewById<View>(R.id.textView).setOnClickListener {
+            logOut()
+        }
+        initViewModel()
+
+    }
+    private fun initViewModel() {
+        lifecycleScope.launch {
+             runBlocking { userViewModel.getUserDetails().first() }
+            userViewModel.userDetailsState.collect {
             }
+
+        }
+    }
+    private fun logOut() {
+        lifecycleScope.launch {
+            userViewModel.logOut()
+            goToAuthActivity()
         }
     }
 
@@ -46,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             this, android.R.anim.fade_in, android.R.anim.fade_out
         )
         startActivity(intent, options.toBundle())
+        finish()
     }
 
     private fun initSplashScreen() {
