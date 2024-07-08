@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="facebook_app_id" translatable="false">1593630281413270</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb1593630281413270</string>
     <string name="facebook_client_token" translatable="false">51146f26178eea79f49c934295e3780e</string>
@@ -16,11 +16,16 @@
     <string name="forgot_password_msg">Forgot Password?</string>
     <string name="have_an_account_msg">Don\'t have an account?</string>
     <string name="register">Register</string>
-    <string name="retry">Retry</string>
-    <string name="ok">Ok</string>
+    <string name="retry" tools:ignore="PrivateResource">Retry</string>
+    <string name="ok" tools:ignore="PrivateResource">OK</string>
     <string name="loading">Loading</string>
     <string name="generic_err_msg">Error please try again later.</string>
     <string name="google_sign_in_field_msg">Google sign in failed, please retry again later.</string>
+    <string name="home">Home</string>
+    <string name="explore">Explore</string>
+    <string name="cart">Cart</string>
+    <string name="offer">Offers</string>
+    <string name="account">Account</string>
     <string name="forget_password_msg">Enter your email, to send an email to update your password.</string>
     <string name="send">Send</string>
     <string name="register_welcome_msg">Let’s Get Started</string>
