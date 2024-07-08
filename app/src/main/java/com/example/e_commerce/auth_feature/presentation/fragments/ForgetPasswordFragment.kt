@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.e_commerce.R
 import com.example.e_commerce.auth_feature.presentation.viewmodel.ForgetPasswordViewModel
 import com.example.e_commerce.core.extensions.showSnakeBarError
-import com.example.e_commerce.core.utils.ProgressDialog
+import com.example.e_commerce.core.views.ProgressDialog
 import com.example.e_commerce.core.utils.Resource
 import com.example.e_commerce.databinding.FragmentForgetPasswordBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
