@@ -14,6 +14,13 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.example.e_commerce.auth_feature.presentation.activity.AuthActivity
 import com.example.e_commerce.auth_feature.presentation.viewmodel.UserViewModel
+import com.example.e_commerce.databinding.ActivityMainBinding
+import com.example.e_commerce.shopping_feature.presentation.adapters.HomeViewPagerAdapter
+import com.example.e_commerce.shopping_feature.presentation.fragments.AccountFragment
+import com.example.e_commerce.shopping_feature.presentation.fragments.CartFragment
+import com.example.e_commerce.shopping_feature.presentation.fragments.ExploreFragment
+import com.example.e_commerce.shopping_feature.presentation.fragments.HomeFragment
+import com.example.e_commerce.shopping_feature.presentation.fragments.OfferFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -24,6 +31,9 @@ import kotlinx.coroutines.runBlocking
 class MainActivity : AppCompatActivity() {
     private val userViewModel by viewModels<UserViewModel>()
 
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         initSplashScreen()
         super.onCreate(savedInstanceState)
@@ -32,25 +42,60 @@ class MainActivity : AppCompatActivity() {
             goToAuthActivity()
             return
         }
-        setContentView(R.layout.activity_main)
-        findViewById<View>(R.id.textView).setOnClickListener {
-            logOut()
-        }
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         initViewModel()
+        initViews()
 
     }
+
+    private fun initViews() {
+        initViewPager()
+        initBottomNavigationView()
+
+    }
+
+    private fun initBottomNavigationView() {
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.homeFragment -> binding.homeViewPager.currentItem = 0
+                R.id.exploreFragment -> binding.homeViewPager.currentItem = 1
+                R.id.cartFragment -> binding.homeViewPager.currentItem = 2
+                R.id.offerFragment -> binding.homeViewPager.currentItem = 3
+                R.id.accountFragment -> binding.homeViewPager.currentItem = 4
+            }
+            true
+        }
+    }
+
+    private fun initViewPager() {
+        val fragments = listOf(
+            HomeFragment(),
+            ExploreFragment(),
+            CartFragment(),
+            OfferFragment(),
+            AccountFragment()
+        )
+
+        binding.homeViewPager.offscreenPageLimit = fragments.size
+        binding.homeViewPager.adapter = HomeViewPagerAdapter(this, fragments)
+        binding.homeViewPager.registerOnPageChangeCallback(
+            object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    binding.bottomNavigationView.menu.getItem(position).isChecked = true
+                }
+            }
+        )
+    }
+
     private fun initViewModel() {
         lifecycleScope.launch {
-             runBlocking { userViewModel.getUserDetails().first() }
+            runBlocking { userViewModel.getUserDetails().first() }
             userViewModel.userDetailsState.collect {
             }
 
-        }
-    }
-    private fun logOut() {
-        lifecycleScope.launch {
-            userViewModel.logOut()
-            goToAuthActivity()
         }
     }
 
