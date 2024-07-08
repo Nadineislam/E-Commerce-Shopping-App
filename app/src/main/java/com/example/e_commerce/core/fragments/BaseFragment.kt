@@ -1,4 +1,4 @@
-package com.example.e_commerce.auth_feature.presentation.fragments
+package com.example.e_commerce.core.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import com.example.e_commerce.BR
-import com.example.e_commerce.core.utils.ProgressDialog
+import com.example.e_commerce.core.views.ProgressDialog
 
 
 

@@ -9,6 +9,7 @@ import com.example.e_commerce.BuildConfig
 import com.example.e_commerce.R
 import com.example.e_commerce.auth_feature.presentation.viewmodel.RegisterViewModel
 import com.example.e_commerce.core.extensions.showSnakeBarError
+import com.example.e_commerce.core.fragments.BaseFragment
 import com.example.e_commerce.core.utils.CrashlyticsUtils
 import com.example.e_commerce.core.utils.RegisterException
 import com.example.e_commerce.core.utils.Resource

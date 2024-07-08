@@ -13,6 +13,7 @@ import com.example.e_commerce.MainActivity
 import com.example.e_commerce.R
 import com.example.e_commerce.auth_feature.presentation.viewmodel.LoginViewModel
 import com.example.e_commerce.core.extensions.showSnakeBarError
+import com.example.e_commerce.core.fragments.BaseFragment
 import com.example.e_commerce.core.utils.CrashlyticsUtils
 import com.example.e_commerce.core.utils.LoginException
 import com.example.e_commerce.core.utils.Resource
