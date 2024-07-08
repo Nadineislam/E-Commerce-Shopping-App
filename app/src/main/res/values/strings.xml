@@ -26,4 +26,13 @@
     <string name="cart">Cart</string>
     <string name="offer">Offers</string>
     <string name="account">Account</string>
+    <string name="forget_password_msg">Enter your email, to send an email to update your password.</string>
+    <string name="send">Send</string>
+    <string name="register_welcome_msg">Let’s Get Started</string>
+    <string name="sign_up_msg">Create a new account</string>
+    <string name="name_et_hint">Full Name</string>
+    <string name="password_again_et_hint">Password Again</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="google_signup_btn_msg">Sign up with Google</string>
+    <string name="facebook_signup_btn_msg">Sign up with facebook</string>
 </resources>

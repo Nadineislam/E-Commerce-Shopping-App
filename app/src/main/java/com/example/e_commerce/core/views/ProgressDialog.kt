@@ -1,4 +1,4 @@
-package com.example.e_commerce.core.utils
+package com.example.e_commerce.core.views
 
 import android.app.Dialog
 import android.content.Context

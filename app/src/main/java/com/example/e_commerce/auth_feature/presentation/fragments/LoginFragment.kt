@@ -2,24 +2,20 @@ package com.example.e_commerce.auth_feature.presentation.fragments
 
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.e_commerce.BuildConfig
 import com.example.e_commerce.MainActivity
 import com.example.e_commerce.R
 import com.example.e_commerce.auth_feature.presentation.viewmodel.LoginViewModel
 import com.example.e_commerce.core.extensions.showSnakeBarError
+import com.example.e_commerce.core.fragments.BaseFragment
 import com.example.e_commerce.core.utils.CrashlyticsUtils
 import com.example.e_commerce.core.utils.LoginException
-import com.example.e_commerce.core.utils.ProgressDialog
 import com.example.e_commerce.core.utils.Resource
 import com.example.e_commerce.databinding.FragmentLoginBinding
 import com.facebook.AccessToken
@@ -38,36 +34,22 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
+class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
-    private val loginViewModel: LoginViewModel by viewModels()
-
-    private val progressDialog by lazy { ProgressDialog.createProgressDialog(requireActivity()) }
     private val callbackManager: CallbackManager by lazy { CallbackManager.Factory.create() }
     private val loginManager: LoginManager by lazy { LoginManager.getInstance() }
 
-    private var _binding: FragmentLoginBinding? = null
-    private val binding get() = _binding!!
+    override fun getLayoutResId(): Int =R.layout.fragment_login
+    override val viewModel: LoginViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewmodel = loginViewModel
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initViewModel()
+    override fun init() {
         initListeners()
+        initViewModel()
     }
 
     private fun initViewModel() {
         lifecycleScope.launch {
-            loginViewModel.loginState.collect { resource ->
+            viewModel.loginState.collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {
                         progressDialog.show()
@@ -101,6 +83,13 @@ class LoginFragment : Fragment() {
         }
         binding.facebookSigninBtn.setOnClickListener {
             loginWithFacebook()
+        }
+        binding.registerTv.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+        binding.forgotPasswordTv.setOnClickListener {
+            val forgetPasswordFragment = ForgetPasswordFragment()
+            forgetPasswordFragment.show(parentFragmentManager, "forget-password")
         }
     }
 
@@ -145,7 +134,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
-        loginViewModel.loginWithGoogle(idToken)
+        viewModel.loginWithGoogle(idToken)
     }
 
     private fun signOut() {
@@ -181,7 +170,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun firebaseAuthWithFacebook(token: String) {
-        loginViewModel.loginWithFacebook(token)
+        viewModel.loginWithFacebook(token)
     }
 
     override fun onDestroyView() {
