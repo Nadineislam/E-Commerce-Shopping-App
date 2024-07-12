@@ -32,5 +32,9 @@
     <string name="sign_up">Sign Up</string>
     <string name="google_signup_btn_msg">Sign up with Google</string>
     <string name="facebook_signup_btn_msg">Sign up with facebook</string>
+    <string name="colon">:</string>
+    <string name="search_products">Search products</string>
+    <string name="more_categories">More categories</string>
+    <string name="category">Category</string>
 
 </resources>
