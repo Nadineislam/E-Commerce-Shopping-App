@@ -3,12 +3,12 @@ package com.example.e_commerce.auth_feature.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.e_commerce.auth_feature.data.models.UserDetailsModel
-import com.example.e_commerce.auth_feature.domain.models.toUserDetailsPreferences
 import com.example.e_commerce.auth_feature.domain.repository.AppDataStoreRepository
 import com.example.e_commerce.auth_feature.domain.repository.UserPreferencesRepository
 import com.example.e_commerce.auth_feature.domain.use_case.LoginUseCase
 import com.example.e_commerce.auth_feature.domain.use_case.LoginWithFacebookUseCase
 import com.example.e_commerce.auth_feature.domain.use_case.LoginWithGoogleUseCase
+import com.example.e_commerce.auth_feature.domain.use_case.toUserDetailsPreferences
 import com.example.e_commerce.core.extensions.isValidEmail
 import com.example.e_commerce.core.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -73,6 +73,7 @@ class LoginViewModel @Inject constructor(
 
     private suspend fun savePreferenceData(userDetailsModel: UserDetailsModel) {
         appDataStoreRepository.saveLoginState(true)
-        userPreferenceRepository.updateUserDetails(userDetailsModel.toUserDetailsPreferences())
+        val country = userPreferenceRepository.getUserCountry().first()
+        userPreferenceRepository.updateUserDetails(userDetailsModel.toUserDetailsPreferences(country))
     }
 }

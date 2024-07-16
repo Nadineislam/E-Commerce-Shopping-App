@@ -39,4 +39,5 @@
     <string name="search_products">Search products</string>
     <string name="more_categories">More categories</string>
     <string name="category">Category</string>
+    <string name="please_select_your_country">Please select your country</string>
 </resources>
