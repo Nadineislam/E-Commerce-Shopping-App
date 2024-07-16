@@ -4,11 +4,13 @@ import android.app.Application
 import android.content.Context
 import com.example.e_commerce.auth_feature.data.datastore.AppPreferencesDataStore
 import com.example.e_commerce.auth_feature.data.repository.AppDataStoreRepositoryImpl
+import com.example.e_commerce.auth_feature.data.repository.CountryRepositoryImpl
 import com.example.e_commerce.auth_feature.domain.repository.FirebaseAuthRepository
 import com.example.e_commerce.auth_feature.data.repository.FirebaseAuthRepositoryImpl
 import com.example.e_commerce.auth_feature.data.repository.UserFirestoreRepositoryImpl
 import com.example.e_commerce.auth_feature.data.repository.UserPreferencesRepositoryImpl
 import com.example.e_commerce.auth_feature.domain.repository.AppDataStoreRepository
+import com.example.e_commerce.auth_feature.domain.repository.CountryRepository
 import com.example.e_commerce.auth_feature.domain.repository.UserFirestoreRepository
 import com.example.e_commerce.auth_feature.domain.repository.UserPreferencesRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -54,6 +56,11 @@ object AuthModule {
         return UserPreferencesRepositoryImpl(context)
     }
 
+    @Provides
+    @Singleton
+    fun providesCountryRepository(fireStore: FirebaseFirestore):CountryRepository{
+        return CountryRepositoryImpl(fireStore)
+    }
 
     @Provides
     @Singleton
