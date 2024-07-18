@@ -1,0 +1,37 @@
+package com.example.e_commerce.shopping_feature.data.models
+
+import android.os.Parcelable
+import com.google.errorprone.annotations.Keep
+import com.google.firebase.firestore.PropertyName
+import kotlinx.parcelize.Parcelize
+
+@Keep
+@Parcelize
+data class ProductModel(
+    var id: String? = null,
+    var name: String? = null,
+    var description: String? = null,
+
+    @get:PropertyName("categories_ids")
+    @set:PropertyName("categories_ids")
+    var categoriesIDs: List<String>? = null,
+
+    var images: List<String>? = null,
+
+    var price: Int? = null,
+    var rate: Float? = null,
+
+    @get:PropertyName("sale_percentage")
+    @set:PropertyName("sale_percentage")
+    var salePercentage: Int? = null,
+
+    @get:PropertyName("sale_type")
+    @set:PropertyName("sale_type")
+    var saleType: String? = null,
+) : Parcelable
+
+
+enum class ProductSaleType(val type: String) {
+    FLASH_SALE("flash_sale"),
+    MEGA_SALE("mega_sale")
+}
