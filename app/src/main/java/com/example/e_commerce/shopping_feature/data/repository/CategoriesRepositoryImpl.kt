@@ -2,6 +2,7 @@ package com.example.e_commerce.shopping_feature.data.repository
 
 import com.example.e_commerce.core.utils.Resource
 import com.example.e_commerce.shopping_feature.data.models.CategoryModel
+import com.example.e_commerce.shopping_feature.data.models.ProductModel
 import com.example.e_commerce.shopping_feature.domain.models.toUIModel
 import com.example.e_commerce.shopping_feature.domain.repository.CategoriesRepository
 import com.example.e_commerce.shopping_feature.presentation.models.CategoryUIModel
@@ -25,6 +26,17 @@ class CategoriesRepositoryImpl @Inject constructor(
             } catch (e: Exception) {
                 emit(Resource.Error(e))
             }
+        }
+    }
+
+    override fun getSaleProducts(
+        countryID: String, saleType: String, pageLimit: Int
+    ): Flow<List<ProductModel>> {
+        return flow {
+            val products = fireStore.collection("products").whereEqualTo("sale_type", saleType)
+                .whereEqualTo("country_id", countryID).orderBy("price").limit(pageLimit.toLong())
+                .get().await().toObjects(ProductModel::class.java)
+            emit(products)
         }
     }
 

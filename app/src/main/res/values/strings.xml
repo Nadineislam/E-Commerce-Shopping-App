@@ -40,4 +40,7 @@
     <string name="more_categories">More categories</string>
     <string name="category">Category</string>
     <string name="please_select_your_country">Please select your country</string>
+    <string name="flash_sale">Flash Sale</string>
+    <string name="see_more">See More</string>
+    <string name="mega_sale">Mega sale</string>
 </resources>

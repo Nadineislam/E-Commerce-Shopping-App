@@ -1,6 +1,7 @@
 package com.example.e_commerce.shopping_feature.presentation.fragments
 
 
+import android.content.ContentValues.TAG
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
@@ -15,6 +16,8 @@ import com.example.e_commerce.core.utils.Resource
 import com.example.e_commerce.core.views.CircleView
 import com.example.e_commerce.databinding.FragmentHomeBinding
 import com.example.e_commerce.shopping_feature.presentation.adapters.CategoriesAdapter
+import com.example.e_commerce.shopping_feature.presentation.adapters.ProductAdapter
+import com.example.e_commerce.shopping_feature.presentation.adapters.ProductViewType
 import com.example.e_commerce.shopping_feature.presentation.adapters.SalesAdAdapter
 import com.example.e_commerce.shopping_feature.presentation.models.CategoryUIModel
 import com.example.e_commerce.shopping_feature.presentation.models.SalesAdUIModel
@@ -34,6 +37,7 @@ class HomeFragment  : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun getLayoutResId(): Int = R.layout.fragment_home
 
     override fun init() {
+        initViews()
         iniViewModel()
     }
 
@@ -66,6 +70,9 @@ class HomeFragment  : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                     }
 
                     is Resource.Success -> {
+//                        binding.categoriesShimmerView.root.stopShimmer()
+//                        binding.categoriesShimmerView.root.visibility = View.GONE
+                        Log.d(TAG, "iniViewModel: categories Success = ${resources.data}")
                         initCategoriesView(resources.data)
                     }
 
@@ -76,8 +83,23 @@ class HomeFragment  : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             }
         }
 
-    }
+//        viewModel.getFlashSaleProducts()
 
+        lifecycleScope.launch {
+            viewModel.flashSaleState.collect { productsList ->
+                flashSaleAdapter.submitList(productsList)
+                Log.d(TAG, "iniViewModel: flashSaleState = $productsList")
+                binding.invalidateAll()
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.megaSaleState.collect { productsList ->
+                megaSaleAdapter.submitList(productsList)
+                binding.invalidateAll()
+            }
+        }
+
+    }
 
     private fun initCategoriesView(data: List<CategoryUIModel>?) {
         if (data.isNullOrEmpty()) {
@@ -94,6 +116,33 @@ class HomeFragment  : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
     }
 
+    private val flashSaleAdapter by lazy {
+        ProductAdapter(viewType = ProductViewType.LIST) {
+          //  goToProductDetails(it)
+        }
+    }
+    private val megaSaleAdapter by lazy {
+        ProductAdapter(viewType = ProductViewType.LIST) {
+          //  goToProductDetails(it)
+        }
+    }
+
+    private fun initViews() {
+        binding.flashSaleProductsRv.apply {
+            adapter = flashSaleAdapter
+            layoutManager = LinearLayoutManager(
+                requireContext(), LinearLayoutManager.HORIZONTAL, false
+            )
+           // addItemDecoration(HorizontalSpaceItemDecoration(16))
+        }
+        binding.megaSaleProductsRv.apply {
+            adapter = megaSaleAdapter
+            layoutManager = LinearLayoutManager(
+                requireContext(), LinearLayoutManager.HORIZONTAL, false
+            )
+          //  addItemDecoration(HorizontalSpaceItemDecoration(16))
+        }
+    }
 
     private fun initSalesAdsView(salesAds: List<SalesAdUIModel>?) {
         if (salesAds.isNullOrEmpty()) {
@@ -144,7 +193,7 @@ class HomeFragment  : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 20, 20
             )
             params.setMargins(8, 0, 8, 0) // Margin between circles
-            circleView.layoutParams = params
+            circleView.setLayoutParams(params)
             circleView.setRadius(10f) // Set radius
             circleView.setColor(
                 if (i == 0) requireContext().getColor(R.color.primary_color) else requireContext().getColor(
@@ -169,6 +218,7 @@ class HomeFragment  : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
     }
 
+
     override fun onResume() {
         super.onResume()
         viewModel.startTimer()
@@ -177,9 +227,5 @@ class HomeFragment  : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun onPause() {
         super.onPause()
         viewModel.stopTimer()
-    }
-
-    companion object {
-        private const val TAG = "HomeFragment"
     }
 }
