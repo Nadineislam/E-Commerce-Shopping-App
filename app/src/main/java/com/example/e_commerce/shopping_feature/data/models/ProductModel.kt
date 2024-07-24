@@ -28,6 +28,24 @@ data class ProductModel(
     @get:PropertyName("sale_type")
     @set:PropertyName("sale_type")
     var saleType: String? = null,
+
+    var colors: List<ProductColorModel>? = null,
+    var sizes: List<ProductSizeModel>? = null,
+) : Parcelable
+
+@Keep
+@Parcelize
+data class ProductColorModel(
+    var size: String? = null,
+    var stock: Int? = null,
+    var color: String? = null
+) : Parcelable
+
+@Keep
+@Parcelize
+data class ProductSizeModel(
+    var size: String? = null,
+    var stock: Int? = null
 ) : Parcelable
 
 

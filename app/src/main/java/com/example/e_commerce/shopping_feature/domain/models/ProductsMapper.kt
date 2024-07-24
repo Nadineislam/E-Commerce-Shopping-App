@@ -1,6 +1,9 @@
 package com.example.e_commerce.shopping_feature.domain.models
 
+import com.example.e_commerce.shopping_feature.data.models.ProductColorModel
 import com.example.e_commerce.shopping_feature.data.models.ProductModel
+import com.example.e_commerce.shopping_feature.data.models.ProductSizeModel
+import com.example.e_commerce.shopping_feature.presentation.models.ProductColorUIModel
 import com.example.e_commerce.shopping_feature.presentation.models.ProductUIModel
 
 fun ProductUIModel.toProductModel(): ProductModel {
@@ -13,7 +16,20 @@ fun ProductUIModel.toProductModel(): ProductModel {
         price = price,
         rate = rate,
         salePercentage = salePercentage,
-        saleType = saleType
+        saleType = saleType,
+        colors = colors.map {
+            ProductColorModel(
+                size = it.size,
+                stock = it.stock,
+                color = it.color
+            )
+        },
+        sizes = sizes.map {
+            ProductSizeModel(
+                size = it.size,
+                stock = it.stock
+            )
+        }
     )
 }
 
@@ -27,6 +43,19 @@ fun ProductModel.toProductUIModel(): ProductUIModel {
         price = price ?: 0,
         rate = rate ?: 0f,
         salePercentage = salePercentage,
-        saleType = saleType
+        saleType = saleType,
+        colors = colors?.map {
+            ProductColorUIModel(
+                size = it.size,
+                stock = it.stock,
+                color = it.color
+            )
+        } ?: emptyList(),
+        sizes = sizes?.map {
+            ProductSizeModel(
+                size = it.size,
+                stock = it.stock
+            )
+        } ?: emptyList()
     )
 }
