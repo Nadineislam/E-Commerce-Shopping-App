@@ -1,6 +1,7 @@
 package com.example.e_commerce.shopping_feature.presentation.models
 
 import android.os.Parcelable
+import com.example.e_commerce.shopping_feature.data.models.ProductSizeModel
 import com.google.errorprone.annotations.Keep
 import kotlinx.parcelize.Parcelize
 
@@ -10,6 +11,8 @@ data class ProductUIModel(
     val id: String,
     val name: String,
     val description: String,
+    val colors: List<ProductColorUIModel>,
+    val sizes: List<ProductSizeModel>,
     val categoriesIDs: List<String>,  // Assuming categories are always provided, but can be empty.
     val images: List<String>,        // Image URLs can also be an empty list if there are no images.
     val price: Int,                  // Presenting price as a non-nullable Int for simplicity in UI calculations and display.
@@ -48,6 +51,7 @@ data class ProductUIModel(
         result = 31 * result + rate.hashCode()
         result = 31 * result + (salePercentage ?: 0)
         result = 31 * result + (saleType?.hashCode() ?: 0)
+        result = 31 * result + colors.hashCode()
         return result
     }
 
@@ -66,6 +70,7 @@ data class ProductUIModel(
         if (price != other.price) return false
         if (salePercentage != other.salePercentage) return false
         if (saleType != other.saleType) return false
+        if (colors != other.colors) return false
 
         return true
     }
@@ -74,3 +79,15 @@ data class ProductUIModel(
         return "ProductUIModel(id='$id', name='$name', description='$description', categoriesIDs=$categoriesIDs, images=$images, price=$price, rate=$rate, priceAfterSale=$priceAfterSale, salePercentage=$salePercentage, saleType=$saleType, currencySymbol='$currencySymbol')"
     }
 }
+@Keep
+@Parcelize
+data class ProductColorUIModel(
+    var size: String? = null, var stock: Int? = null, var color: String? = null
+) : Parcelable
+
+
+@Keep
+@Parcelize
+data class ProductSizeUIModel(
+    var size: String? = null, var stock: Int? = null
+) : Parcelable
